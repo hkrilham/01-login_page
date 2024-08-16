@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final loginUserEmail;
+  const HomePage({super.key, required this.loginUserEmail});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -14,8 +15,8 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('Home Page'),
       ),
-      body: Center(
-        child: const Text(
+      body: const Center(
+        child: Text(
           "Welcome",
           style: TextStyle(
             fontSize: 40,

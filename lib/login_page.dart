@@ -9,10 +9,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  //Conroller email password
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+
+  // creat formKey
   final formKey = GlobalKey<FormState>();
 
+  //password Visibiliti functions
   bool _visibility = false;
   void visibility() {
     setState(() {
@@ -20,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  // Email validate Functions
   bool validateEmail(String email) {
     String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
     RegExp regex = RegExp(emailPattern);
@@ -111,7 +116,9 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const HomePage(),
+                              builder: (context) => HomePage(
+                                loginUserEmail: _email.text,
+                              ),
                             ));
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
