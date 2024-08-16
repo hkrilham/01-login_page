@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:login_page/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -11,6 +12,20 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  bool _visibility = false;
+  void visibility() {
+    setState(() {
+      _visibility = !_visibility;
+    });
+  }
+
+  bool validateEmail(String email) {
+    String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    RegExp regex = RegExp(emailPattern);
+    return regex.hasMatch(email);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 30),
                 TextFormField(
                   controller: _password,
-                  obscureText: true,
+                  obscureText: _visibility,
                   decoration: InputDecoration(
                       border: const OutlineInputBorder(),
                       hintText: 'Enter the password',
@@ -63,40 +78,46 @@ class _LoginPageState extends State<LoginPage> {
                         color: Colors.amber,
                       ),
                       suffixIcon: IconButton(
-                        icon: const Icon(
-                          Icons.remove_red_eye,
+                        icon: Icon(
+                          _visibility ? Icons.visibility_off : Icons.visibility,
                           color: Colors.amber,
                         ),
-                        onPressed: () {},
+                        onPressed: visibility,
                       ),
                       labelText: 'Password'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter the password';
-                    }
-                    if (value.length < 6) {
+                    } else if (value.length < 6) {
                       return 'Enter the minumum 6 letters';
                     }
+                    return null;
                   },
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  child: const Text(
-                    "Login",
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber,
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber,
+                      ),
                     ),
-                  ),
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      print(_email.text);
-                      print(_password.text);
-                    }
-                    print("ERORRRRRRRRRRRRRRRRRRRR");
-                  },
-                ),
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Logon Success...')));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomePage(),
+                            ));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Logon failed...')));
+                      }
+                    }),
               ],
             ),
           ),
